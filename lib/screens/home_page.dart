@@ -1,3 +1,4 @@
+import 'package:daxos/widgets/expanding_text_field.dart';
 import 'package:daxos/widgets/message_box.dart';
 import 'package:flutter/material.dart';
 
@@ -9,11 +10,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<MessageBox> messages = [
-    MessageBox("Hello"),
-    MessageBox("Bye", false),
-    MessageBox("What r u doing?")
-  ];
+  List<MessageBox> messages = [];
 
   TextEditingController controller = TextEditingController();
 
@@ -40,10 +37,13 @@ class _HomePageState extends State<HomePage> {
 
           // Chat
           Expanded(
-            child: ListView(
-              scrollDirection: Axis.vertical,
+            child: ListView.builder(
               reverse: true,
-              children: messages,
+              scrollDirection: Axis.vertical,
+              itemCount: messages.length,
+              itemBuilder: (BuildContext context, int index) {
+                return messages[index];
+              },
             )
           ),
 
@@ -60,18 +60,8 @@ class _HomePageState extends State<HomePage> {
                     bottom: 10,
                     right: 5
                   ),
-                  child: TextField(
-                    controller: controller,
-                    decoration: InputDecoration(
-                      hintText: "Ask me anything...",
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15)
-                      )
-                    ),
-                    minLines: 3,
-                    maxLines: 5,
-                    // decoration: ,
+                  child: ExpandingTextField(
+                    controller: controller
                   ),
                 ),
               ),
@@ -80,7 +70,10 @@ class _HomePageState extends State<HomePage> {
                   icon: Icon(Icons.send),
                   iconSize: 32,
                   onPressed: isLocked ? null : () {
-                    // TODO message logic
+                    setState(() {
+                      messages.insert(0, MessageBox(controller.text));
+                      controller.clear();
+                    });
                   }
                 ),
               )
