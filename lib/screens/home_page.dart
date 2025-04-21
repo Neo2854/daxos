@@ -1,3 +1,4 @@
+import 'package:daxos/widgets/circular_icon_btn.dart';
 import 'package:daxos/widgets/expanding_text_field.dart';
 import 'package:daxos/widgets/message_box.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +43,7 @@ class _HomePageState extends State<HomePage> {
               scrollDirection: Axis.vertical,
               itemCount: messages.length,
               itemBuilder: (BuildContext context, int index) {
-                return messages[index];
+                return messages[messages.length - index - 1];
               },
             )
           ),
@@ -51,31 +52,29 @@ class _HomePageState extends State<HomePage> {
 
           // Actions Bar
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              CircularIconBtn(
+                icon: Icons.menu,
+                onTap: () {
+
+                },
+              ),
               Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: 30,
-                    top: 10,
-                    bottom: 10,
-                    right: 5
-                  ),
-                  child: ExpandingTextField(
-                    controller: controller
-                  ),
+                child: ExpandingTextField(
+                  controller: controller
                 ),
               ),
-              Center(
-                child: IconButton(
-                  icon: Icon(Icons.send),
-                  iconSize: 32,
-                  onPressed: isLocked ? null : () {
-                    setState(() {
-                      messages.insert(0, MessageBox(controller.text));
-                      controller.clear();
-                    });
-                  }
-                ),
+              CircularIconBtn(
+                icon: Icons.send_rounded,
+                onTap: () {
+                  if(controller.text.trim().isEmpty) return;
+
+                  setState(() {
+                    messages.add(MessageBox(controller.text));
+                    controller.clear();
+                  });
+                },
               )
             ],
           ),

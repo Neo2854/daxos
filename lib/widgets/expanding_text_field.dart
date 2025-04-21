@@ -17,7 +17,9 @@ class ExpandingTextField extends StatelessWidget {
         textInputAction: TextInputAction.newline,
         decoration: const InputDecoration(
           hintText: "What do you want?",
-          border: OutlineInputBorder()
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30))
+          )
         ),
       ),
     );
