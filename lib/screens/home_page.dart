@@ -21,62 +21,6 @@ class _HomePageState extends State<HomePage> {
 
   bool isLocked = false;
 
-  Future<Database>? remainderDb;
-
-  void startRemaindersDb() async {
-    print("Hello");
-    WidgetsFlutterBinding.ensureInitialized();
-
-    this.remainderDb = openDatabase(
-      join(await getDatabasesPath(), "remainders.db"),
-
-      onCreate: (db, version) {
-        return db.execute(
-          CREATE_REMAINDERS_DB
-        );
-      },
-
-      version: 1
-    );
-
-    print(this.remainderDb);
-  }
-
-  Future<void> insertRemainder(Remainder remainder) async {
-    final db = await remainderDb;
-
-    if(db == null) return;
-
-    await db.insert(
-      'Remainders',
-      remainder.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace 
-    );
-  }
-
-  Future<List<Remainder>> getRemaindersFromDb() async {
-    // Get a reference to the database.
-    final db = await remainderDb;
-
-    if(db == null) return [];
-
-    // Query the table for all the dogs.
-    final List<Map<String, Object?>> dogMaps = await db.query('dogs');
-
-    // Convert the list of each dog's fields into a list of `Dog` objects.
-    return [
-      for (final {'name': name as String, 'description': description as String}
-          in dogMaps)
-        Remainder(name: name, description: description),
-    ];
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    startRemaindersDb();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -134,12 +78,6 @@ class _HomePageState extends State<HomePage> {
                     messages.add(MessageBox(controller.text));
                     controller.clear();
                   });
-
-                  var fido = Remainder(name: "Test", description: "Hello World");
-
-                  await insertRemainder(fido);
-
-                  print(await getRemaindersFromDb());
                 },
               )
             ],
