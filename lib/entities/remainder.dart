@@ -45,8 +45,12 @@ class Remainder {
       id: json[RemainderFields.id] as int?,
       name: json[RemainderFields.name] as String,
       description: json[RemainderFields.description] as String,
-      startTs: DateTime.parse(json[RemainderFields.startTs] as String),
-      endTs: DateTime.parse(json[RemainderFields.endTs] as String)
+      startTs: json[RemainderFields.startTs] != null
+        ? DateTime.parse(json[RemainderFields.startTs] as String)
+        : null,
+      endTs: json[RemainderFields.endTs] != null
+        ? DateTime.parse(json[RemainderFields.endTs] as String)
+        : null
     );
 
   Map<String, Object?> toJson() => {

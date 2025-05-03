@@ -1,4 +1,5 @@
 import 'package:daxos/constants/queries.dart';
+import 'package:daxos/db/remainders_db.dart';
 import 'package:daxos/entities/remainder.dart';
 import 'package:daxos/widgets/circular_icon_btn.dart';
 import 'package:daxos/widgets/expanding_text_field.dart';
@@ -60,8 +61,14 @@ class _HomePageState extends State<HomePage> {
             children: [
               CircularIconBtn(
                 icon: Icons.menu,
-                onTap: () {
+                onTap: () async {
+                  List<Remainder> remainders = await RemaindersDB.instance.read();
 
+                  if(remainders == null) return;
+
+                  for(int i=0;i<remainders.length;i++){
+                    print(remainders[i].name);
+                  }
                 },
               ),
               Expanded(
@@ -78,6 +85,8 @@ class _HomePageState extends State<HomePage> {
                     messages.add(MessageBox(controller.text));
                     controller.clear();
                   });
+
+                  RemaindersDB.instance.clear();
                 },
               )
             ],

@@ -102,6 +102,14 @@ class RemaindersDB{
     );
   }
 
+  Future<int> clear() async {
+    final db = await instance.db;
+
+    return await db.delete(
+      tableRemainders
+    );
+  }
+
   Future close() async {
     final db = await instance.db;
 
